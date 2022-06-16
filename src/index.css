@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;700;900&display=swap');
+
+body{
+  font-size: 14px;
+  color: #1E293B;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; 
+}
+
+
+.course-card{
+  /* padding: 12px 0; */
+  border: 1px solid #a8a8a8;
+  border-radius: 8px;
+  box-shadow: 1px 1px 8px 1px rgba(168,168,168,1);
+}
+
+.course-card .card-heading{
+  /* padding: 0 13px 16px 13px; */
+  /* padding: 0 13px 0 13px; */
+  font-size: 20px;
+  font-weight: bold;
+  color: #686a6a;
+  /* border-bottom: 2px solid #eaecef; */
+}
+
+.course-card .card-heading + span:hover{
+  cursor: pointer
+}
+
+.course-card>div{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 2px solid #eaecef;
+}
+
+.course-card>div>h3{
+  font-size: 18px;
+  font-weight: 500;
+  color: #2196f3;
+}
+
+.course-card>div>h5{
+  color: #111;
+  font-weight: 500;
+}
+
+.course-card div:last-child{
+  border: none;
+}
+
+.loadingSpinnerContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingSpinner {
+  width: 64px;
+  height: 64px;
+  border: 8px solid;
+  border-color: #2196f3 transparent #2196f3 transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.common{
+  color: white;
+  padding: 5px;
+  border-radius: 4px
+}
+
+.pending{
+  background: rgba(255, 0, 0, 0.64);
+}
+
+.paid{
+  background: rgba(0, 128, 0, 0.81);
+}
+
+.data-table-extensions{
+  position: absolute;
+  top: 87px;
+  right: 18px;
+  width: 11%;
+  z-index: 1
+}
+
+
+
+
+
+/*  */
+
+
+
+
+.invoice-box {
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid #eee;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+  line-height: 24px;
+  font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+  color: #555;
+}
+
+.invoice-box table {
+  width: 100%;
+  line-height: inherit;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.invoice-box table td {
+  padding: 5px;
+  vertical-align: top;
+}
+
+.invoice-box table tr td:nth-child(2) {
+  text-align: right;
+}
+
+.invoice-box table tr.top table td {
+  padding-bottom: 20px;
+}
+
+.invoice-box table tr.top table td.title {
+  font-size: 45px;
+  line-height: 45px;
+  color: #333;
+}
+
+.invoice-box table tr.information table td {
+  padding-bottom: 40px;
+}
+
+.invoice-box table tr.heading td {
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.invoice-box table tr.details td {
+  padding-bottom: 20px;
+}
+
+.invoice-box table tr.item td {
+  border-bottom: 1px solid #eee;
+}
+
+.invoice-box table tr.item.last td {
+  border-bottom: none;
+}
+
+.invoice-box table tr.total td:nth-child(2) {
+  border-top: 2px solid #eee;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+  .invoice-box table tr.top table td {
+      width: 100%;
+      display: block;
+      text-align: center;
+  }
+
+  .invoice-box table tr.information table td {
+      width: 100%;
+      display: block;
+      text-align: center;
+  }
+}
+
+
