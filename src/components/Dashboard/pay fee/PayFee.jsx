@@ -62,7 +62,7 @@ const PayFee = () => {
         const transRef = collection(db, "transactions");
         const q = query(
           transRef,
-          where("userId", "==", selectedStudent.id),
+          where("studentId", "==", selectedStudent.id),
           orderBy("timeStamp", "asc")
         );
         const querySnap = await getDocs(q);
@@ -156,9 +156,10 @@ const PayFee = () => {
     const data = { ...transData };
     data.userId = selectedStudent.userId;
     data.studentId = selectedStudent.id;
+    data.amount = data.amount * 1;
     const studentRef = doc(db, "students", selectedStudent.id);
 
-    if(data.amount?.trim() === '' || data.type == ''){
+    if(data.amount === NaN || data.type == ''){
       toast.error('Invalid Details');
       setLoading(false)
       return ;
@@ -246,7 +247,7 @@ const PayFee = () => {
     <MainArea open={true}>
       <MainCard>
         <div className="p-5 flex items-center">
-          <h3 className="font-semibold uppercase text-[#2196f3]">update Fee</h3>
+          <h3 className="font-semibold uppercase text-[#2196f3]">pay Fee</h3>
         </div>
         <div className="grid grid-cols-2 gap-4 p-5">
           <TextField

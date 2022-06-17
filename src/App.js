@@ -16,7 +16,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import RegisterUser from "./components/Dashboard/register user/RegisterUser";
 import PayFee from "./components/Dashboard/pay fee/PayFee";
 import ViewStudent from "./components/Dashboard/view student/ViewStudent";
-import Transactions from "./components/Dashboard/transactions/Transactions";
+import Transactions from "./components/Dashboard/transactions";
 
 
 function App() {

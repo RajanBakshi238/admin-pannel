@@ -1,4 +1,4 @@
-import UserRegistrationForm from "../../Form/UserRegistrationForm"
+import UserRegistrationForm from "./UserRegistrationForm"
 import MainArea from "../../layout/MainArea"
 import MainCard from "../MainCard"
 

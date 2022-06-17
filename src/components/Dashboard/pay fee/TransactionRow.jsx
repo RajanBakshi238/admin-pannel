@@ -2,10 +2,6 @@ import moment from "moment";
 import { transTypes } from "../dashboardUtils";
 
 const TransactionRow = ({transData: {timeStamp, type, month, amount}}) => {
-    console.log(timeStamp)
-    console.log(type)
-    console.log(month)
-    console.log(amount)
     
     return (
     <div className="flex items-center justify-start p-5 border-b">

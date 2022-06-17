@@ -5,7 +5,6 @@ import Switch from "@mui/material/Switch";
 import Autocomplete from "@mui/material/Autocomplete";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
-  setDoc,
   doc,
   addDoc,
   serverTimestamp,
@@ -20,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { TextField, MenuItem } from "@mui/material";
 
 import { db } from "../../firebase.config";
-import { SelectInputField, StudentInputField } from "./Input";
 import studentRegistrationFormSchema from "../../schema/studentRegistrationFormSchema";
 import Loading from "../Loading";
 
@@ -126,7 +124,7 @@ const StudentRegisterationForm = () => {
                 options={users}
                 getOptionLabel={(option) => `${option.firstName} ${option.lastName}` }
                 onChange={(event, value) => {
-                  formik.setFieldValue("fullName", `${value.firstName} ' ' ${value.lastName}`);
+                  formik.setFieldValue("fullName", `${value.firstName}  ${value.lastName}`);
                   handleUser(value.id);
                 }}
                 renderInput={(params) => (
