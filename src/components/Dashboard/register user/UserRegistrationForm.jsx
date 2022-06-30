@@ -15,12 +15,13 @@ import {
 } from "firebase/firestore";
 import { MenuItem } from "@mui/material";
 import { db } from "../../../firebase.config";
-import { SelectInputField, StudentInputField } from "../../Form/Input";
+import { SelectInputField, PasswordInputField , StudentInputField } from "./registerUserUtils";
 import { userData } from "../../Form/formUtils";
 import { useNavigate } from "react-router-dom";
 import userRegistrationFormSchema from "../../../schema/userRegistrationFormSchema";
 import { useState, useEffect } from "react";
 import Loading from "../../Loading";
+import { toast } from "react-toastify";
 
 const role = [
   { name: "Admin", value: "1" },
@@ -62,8 +63,10 @@ const UserRegistrationForm = () => {
       await setDoc(doc(db, "users", user.uid), dataCopy);
       resetForm({ values: "" });
       // setLoading(false)
+      toast.success("User registered sucessfully")
       navigate("/register-student");
     } catch (error) {
+      toast.error("Something went wrong please try again ....")
       console.log(error);
     } finally {
       setLoading(false);
@@ -106,7 +109,7 @@ const UserRegistrationForm = () => {
                 type="text"
                 name="mobileNumber"
               />
-              <StudentInputField label="Password" type="text" name="password" />
+              <PasswordInputField label="Password" name="password" />
             </div>
 
             <h2 className="my-4 pt-4 uppercase text-sm text-[#2196f3] font-bold">

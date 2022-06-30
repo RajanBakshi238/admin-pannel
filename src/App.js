@@ -4,20 +4,20 @@ import { useDispatch } from "react-redux";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { setUser } from "./redux/actions";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import RegisterStudent from "./components/Dashboard/register student/RegisterStudent";
 import RegisterClass from "./components/Dashboard/register class/RegisterClass";
-import Classes from "./components/Dashboard/classes/Classes";
+import Classes from "./components/Dashboard/classes";
 import Students from "./components/Dashboard/students/Students";
 import PrivateRoute from "./components/PrivateRoute";
-import RegisterUser from "./components/Dashboard/register user/RegisterUser";
+import RegisterUser from "./components/Dashboard/register user";
 import PayFee from "./components/Dashboard/pay fee/PayFee";
 import ViewStudent from "./components/Dashboard/view student/ViewStudent";
 import Transactions from "./components/Dashboard/transactions";
-
+import SidebarState from "./context/sidebar/SidebarState";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <SidebarState>
       <Router>
         <Routes>
           <Route path="/sign-up" element={<SignUp />} />
@@ -57,7 +57,7 @@ function App() {
       </Router>
 
       <ToastContainer />
-    </>
+    </SidebarState>
   );
 }
 

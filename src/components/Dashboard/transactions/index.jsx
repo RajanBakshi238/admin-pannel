@@ -1,20 +1,30 @@
 import { useEffect, useState } from "react";
-import { collection, query, orderBy, getDocs, where } from "firebase/firestore";
+import Invoice from "./Invoice";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DataTable from "react-data-table-component";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import { TextField, MenuItem, Button } from "@mui/material";
-
+import millify from "millify";
 import {
-  columns,
+  TextField,
+  MenuItem,
+  Button,
+  Tooltip,
+  IconButton,
+  tooltipClasses,
+  styled
+} from "@mui/material";
+import {
   dateFilter,
   customStyles,
   downloadCSV,
   DateInput,
   fetchTransactionsData,
+  formatId,
 } from "./transactionUtils";
+import { formatAmount, transTypes } from "../dashboardUtils";
 import MainArea from "../../layout/MainArea";
-import { db } from "../../../firebase.config";
 import PaymentCard from "./PaymentCard";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,14 +35,18 @@ const Transactions = () => {
   const [filter, setFilter] = useState({ filterByType: "" });
   const [dateRange, setDateRange] = useState([null, null]);
   const [transactionsTotal, setTransactionsTotal] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState({
+    isCopied: false,
+    copiedId: "",
+  });
+  const { isCopied, copiedId } = copied;
   const [startDate, endDate] = dateRange;
   const { filterByType } = filter;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const {
           todayPayment,
           lastWeekPayment,
@@ -56,6 +70,130 @@ const Transactions = () => {
     fetchData();
   }, []);
 
+  const TransactionTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: "#2196f3",
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: "#2196f3",
+    },
+  }));
+
+  const onCopyText = (id) => {
+    setCopied((prevState) => ({
+      ...prevState,
+      isCopied: true,
+      copiedId: id,
+    }));
+    setTimeout(() => {
+      setCopied((prevState) => ({
+        ...prevState,
+        isCopied: false,
+        copiedId: "",
+      }));
+    }, 1000);
+  };
+
+  const customSort = (rows, selector, direction) => {
+    return rows.sort((a, b) => {
+      const aField = ("" + selector(a)).toLowerCase();
+      const bField = ("" + selector(b)).toLowerCase();
+
+      let comparison = 0;
+
+      if (aField > bField) {
+        comparison = 1;
+      } else if (aField < bField) {
+        comparison = -1;
+      }
+
+      return direction === "desc" ? comparison * -1 : comparison;
+    });
+  };
+
+  const columns = [
+    {
+      name: "Full Name",
+      selector: (row) => row.fullName,
+      sortable: true,
+    },
+    {
+      name: "User Name",
+      selector: (row) => row.userName,
+      sortable: true,
+    },
+    {
+      name: "Roll Number",
+      selector: (row) => row.rollNumber,
+      sortable: true,
+    },
+    {
+      name: "Transaction Type",
+      selector: (row) => (
+        <span>{`${transTypes[row.type]} ${
+          Boolean(row.month) ? `( ${row.month} )` : ""
+        }`}</span>
+      ),
+    },
+    {
+      name: "Date",
+      selector: (row) => (
+        <span>
+          {moment(row.timeStamp.seconds * 1000).format("DD - MMM - YY")}
+        </span>
+      ),
+    },
+    {
+      name: "Amount",
+      // selector: (row) => `$ ${formatAmount(row.amount)}`
+      selector: (row) => `$ ${millify(row.amount)}`,
+    },
+    {
+      name: "Transaction Id",
+      selector: (row) => (
+        <div>
+          <span className="transId">{formatId(row.transId)}</span>
+          <TransactionTooltip
+            placement="top"
+            open={copied && copiedId === row.transId}
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            title="Copied ...."
+          >
+            <span>
+              <CopyToClipboard
+                text={row.transId}
+                onCopy={() => onCopyText(row.transId)}
+              >
+                <IconButton>
+                  <ContentCopyIcon sx={{ color: "#474b4899" }} />
+                </IconButton>
+              </CopyToClipboard>
+            </span>
+          </TransactionTooltip>
+        </div>
+      ),
+      width: "155px",
+    },
+    {
+      name: "Invoice",
+      selector: (row) => (
+        <Invoice
+          transId={row.transId}
+          transTime={row.timeStamp.seconds}
+          studentId={row.studentId}
+          userId={row.userId}
+          month={row.month}
+          type={row.type}
+          amount={row.amount}
+        />
+      ),
+    },
+  ];
+
   const filteredTransactions = transactions.filter(
     (transaction) =>
       transaction.type.includes(filterByType) &&
@@ -74,7 +212,7 @@ const Transactions = () => {
   }
 
   return (
-    <MainArea open={true}>
+    <MainArea>
       <h1 className="text-2xl font-bold font-sans mb-5">Transactions</h1>
       <div className="grid grid-cols-4 gap-4 mb-5">
         <PaymentCard
@@ -152,6 +290,7 @@ const Transactions = () => {
         selectableRows
         highlightOnHover
         customStyles={customStyles}
+        sortFunction={customSort}
       />
     </MainArea>
   );

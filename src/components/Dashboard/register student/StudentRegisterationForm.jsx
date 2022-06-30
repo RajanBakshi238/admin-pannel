@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import FormGroup from "@mui/material/FormGroup";
-import Switch from "@mui/material/Switch";
-import Autocomplete from "@mui/material/Autocomplete";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import {
   doc,
   addDoc,
@@ -15,12 +11,19 @@ import {
   where,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import {
+  TextField,
+  MenuItem,
+  Autocomplete,
+  Switch,
+  FormGroup,
+  FormControlLabel,
+} from "@mui/material";
 
-import { TextField, MenuItem } from "@mui/material";
-
-import { db } from "../../firebase.config";
-import studentRegistrationFormSchema from "../../schema/studentRegistrationFormSchema";
-import Loading from "../Loading";
+import { db } from "../../../firebase.config";
+import studentRegistrationFormSchema from "../../../schema/studentRegistrationFormSchema";
+import Loading from "../../Loading";
+import { toast } from "react-toastify";
 
 const StudentRegisterationForm = () => {
   const [listings, setListings] = useState([]);
@@ -34,13 +37,12 @@ const StudentRegisterationForm = () => {
       const classesRef = collection(db, "classes");
       const usersRef = collection(db, "users");
 
-      const q = query(classesRef, orderBy("timestamp", "asc"));
+      const q = query(classesRef, orderBy("classCode", "asc"));
       const q2 = query(
         usersRef,
         where("role", "==", "3"),
         orderBy("userName", "asc")
       );
-      const q3 = query();
       const querySnap = await getDocs(q);
       const querySnap2 = await getDocs(q2);
 
@@ -88,16 +90,16 @@ const StudentRegisterationForm = () => {
       dataCopy.rollNumber = roll;
       dataCopy.classCode = classCode;
       dataCopy.pendingFee = 0;
-      dataCopy.userId = selectedUser.id
-      dataCopy.user = doc(db, `/users/${selectedUser.id}`)
+      dataCopy.userId = selectedUser.id;
+      dataCopy.user = doc(db, `/users/${selectedUser.id}`);
 
-      const docRef = await addDoc(studentRef, dataCopy)
-      console.log("success", docRef.id);
+      const docRef = await addDoc(studentRef, dataCopy);
+      toast.success("Student registered successfully");
+      navigate("/students");
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong please try again ...");
     }
     setLoading(false);
-    navigate("/students");
   };
 
   const handleUser = (id) => {
@@ -122,9 +124,14 @@ const StudentRegisterationForm = () => {
                 name="fullName"
                 className="-mt-4"
                 options={users}
-                getOptionLabel={(option) => `${option.firstName} ${option.lastName}` }
+                getOptionLabel={(option) =>
+                  `${option.firstName} ${option.lastName}`
+                }
                 onChange={(event, value) => {
-                  formik.setFieldValue("fullName", `${value.firstName}  ${value.lastName}`);
+                  formik.setFieldValue(
+                    "fullName",
+                    `${value.firstName}  ${value.lastName}`
+                  );
                   handleUser(value.id);
                 }}
                 renderInput={(params) => (

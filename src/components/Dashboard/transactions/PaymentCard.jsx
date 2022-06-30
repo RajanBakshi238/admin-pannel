@@ -1,4 +1,5 @@
 import PaidIcon from '@mui/icons-material/Paid';
+import millify from "millify";
 
 import { formatAmount } from '../dashboardUtils';
 
@@ -14,7 +15,8 @@ const PaymentCard = ({ color, text, total }) => {
           </div>
           <div>
             <div className="p-2">
-              <h3 className="text-2xl text-gray-600 font-medium mb-2 text-right">$ {formatAmount(total)}</h3>
+              {/* <h3 className="text-2xl text-gray-600 font-medium mb-2 text-right">$ {formatAmount(total)}</h3> */}
+              <h3 className="text-2xl text-gray-600 font-medium mb-2 text-right">$ {millify(total.toString())}</h3>
               <p className='mb-2 font-semibold text-gray-400'>{text}</p>
             </div>
           </div>

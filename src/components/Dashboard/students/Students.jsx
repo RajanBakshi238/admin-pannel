@@ -5,12 +5,10 @@ import {
   getDocs,
   query,
   orderBy,
-  getDoc,
-  doc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebase.config";
-import { FaUserEdit } from "react-icons/fa";
+import { FaUserTie } from "react-icons/fa";
 import DataTableExtensions from "react-data-table-component-extensions";
 import "react-data-table-component-extensions/dist/index.css";
 
@@ -145,18 +143,20 @@ const Students = () => {
     {
       name: "User Name",
       selector: "userName",
+      sortable: true
     },
     {
       name: "Roll Number",
       selector: "rollNumber",
+      sortable: true
     },
     {
       name: "Full Name",
-      cell: (d) => <>{d.firstName + " " + d.lastName}</>,
+      cell: (d) => <>{d.firstName + " " + d.lastName}</>
     },
     {
       name: "Class",
-      selector: "standard",
+      selector: "standard"
     },
     {
       name: "Session",
@@ -175,6 +175,7 @@ const Students = () => {
           {d.pendingFee <= 0 ? "Paid" : "Pending"}
         </div>
       ),
+      sortable: true
     },
     {
       name: "Action",
@@ -186,7 +187,7 @@ const Students = () => {
       selector: "id",
       cell: (d) => (
         <button onClick={() => handleUserEdit(d)}>
-          <FaUserEdit style={d} />
+          <FaUserTie style={d} />
         </button>
       ),
     },
@@ -213,7 +214,7 @@ const Students = () => {
   }
 
   return (
-    <MainArea open={true}>
+    <MainArea>
       <MainCard>
         <DataTableExtensions {...tableData} filter={false}>
           <DataTable

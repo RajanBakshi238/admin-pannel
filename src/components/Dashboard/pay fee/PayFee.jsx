@@ -12,14 +12,12 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { toast } from "react-toastify";
-import moment from "moment";
 import { FaRegEdit } from "react-icons/fa";
 import { db } from "../../../firebase.config";
 import MainCard from "../MainCard";
 import MainArea from "../../layout/MainArea";
 import { TextField, MenuItem } from "@mui/material";
 
-import { transTypes } from "../dashboardUtils";
 import Loading from "../../Loading";
 import TransactionRow from "./TransactionRow";
 
@@ -154,6 +152,8 @@ const PayFee = () => {
   const handleSubmit = async () => {
     setLoading(true);
     const data = { ...transData };
+    data.userRef = doc(db, `/users/${selectedStudent.userId}`)
+    data.studentRef = doc(db, `/students/${selectedStudent.id}`)
     data.userId = selectedStudent.userId;
     data.studentId = selectedStudent.id;
     data.amount = data.amount * 1;
@@ -222,6 +222,9 @@ const PayFee = () => {
         break;
     }
 
+    console.log(data);
+
+
     const docRef = await addDoc(collection(db, "transactions"), data);
     console.log(docRef.id);
     const transactionSnap = await getDoc(doc(db, "transactions", docRef.id));
@@ -244,7 +247,7 @@ const PayFee = () => {
   };
 
   return (
-    <MainArea open={true}>
+    <MainArea>
       <MainCard>
         <div className="p-5 flex items-center">
           <h3 className="font-semibold uppercase text-[#2196f3]">pay Fee</h3>
